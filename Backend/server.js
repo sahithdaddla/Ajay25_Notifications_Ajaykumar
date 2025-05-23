@@ -4,14 +4,14 @@ const cors = require('cors');
 require('dotenv').config();
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3023;
 
 // PostgreSQL connection
 const pool = new Pool({
     user: process.env.PG_USER || 'postgres',
-    host: process.env.PG_HOST || 'localhost',
+    host: process.env.PG_HOST || 'postgres',
     database: process.env.PG_DATABASE || 'new_employee_db',
-    password: process.env.PG_PASSWORD || 'Password@12345',
+    password: process.env.PG_PASSWORD || 'admin123',
     port: process.env.PG_PORT || 5432,
 });
 
@@ -39,7 +39,7 @@ async function createTables() {
 
 // Middleware
 app.use(cors({
-    origin: ['http://localhost:3000', 'http://127.0.0.1:5501'],
+    origin: ['http://54.166.206.245:3023', 'http://127.0.0.1:5501'],
     methods: ['GET', 'POST', 'OPTIONS'],
     allowedHeaders: ['Content-Type'],
 }));
@@ -160,7 +160,7 @@ app.get('/api/notifications/:employeeId', async (req, res) => {
 async function startServer() {
     await createTables();
     app.listen(port, () => {
-        console.log(`Server running on http://localhost:${port}`);
+        console.log(`Server running on http://54.166.206.245:${port}`);
     });
 }
 
