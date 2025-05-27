@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HR Notification Portal</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #4f46e5;
@@ -38,12 +37,13 @@
             flex-direction: column;
             padding: 20px;
         }
-    header {
+
+        header {
             position: relative;
             text-align: center;
             height: 140px;
             background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-            color: #f8f9fa;
+            color: white;
             border-radius: 16px;
             overflow: hidden;
             display: flex;
@@ -79,7 +79,7 @@
             50% { transform: translateY(-50%) translateX(-50%); }
             100% { transform: translateY(0) translateX(0); }
         }
-        
+
         .banner-background {
             position: absolute;
             top: 0;
@@ -116,6 +116,7 @@
             left: 40%;
             animation-duration: 15s;
         }
+
         .container {
             width: 100%;
             max-width: 1400px;
@@ -181,7 +182,6 @@
 
         select {
             appearance: none;
-            
         }
 
         textarea {
@@ -283,7 +283,7 @@
             <div class="circle"></div>
             <div class="circle"></div>
         </div>
- <h1>Notification To Staff</h1>
+        <h1>Notification To Staff</h1>
         <p>Create new notifications to staff</p>
     </header>
 
@@ -299,128 +299,89 @@
                         </select>
                         <p class="error-message" id="departmentError">Please select a department</p>
                     </div>
-                    <div class="form-group hidden" id="employeeGroup">
-                        <label for="employee">Employee</label>
-                        <select id="employee">
-                            <option value="" disabled selected>Select Employee</option>
-                        </select>
-                        <p class="error-message" id="employeeError">Please select an employee</p>
-                    </div>
                     <div class="form-group hidden" id="employeeIdGroup">
                         <label for="employeeId">Employee ID</label>
-                        <input type="text" id="employeeId" placeholder="e.g., ATS0123"
-                               pattern="^[ATS]{3}0(?!000)[0-9]{3}$"
-                               title="Employee ID must be ATS0xxx (e.g., ATS0123, not ATS0000)">
-                        <p class="error-message" id="employeeIdError">Invalid employee ID format</p>
+                        <input type="text" id="employeeId" placeholder="e.g., ATS0xxx" minlength="7" maxlength="7">
+                        <p class="error-message" id="employeeIdError">Invalid employee ID format (e.g., ATS0123)</p>
                     </div>
                     <div class="form-group">
                         <label for="title">Notification Title</label>
-                        <input type="text" id="title" placeholder="Notification Title" required
-                               pattern="^[A-Za-z0-9.,!?-]+(?:\s[A-Za-z0-9.,!?-]+)*$"
-                               title="No leading/trailing spaces or consecutive spaces">
-                        <p class="error-message" id="titleError">Invalid title format</p>
+                        <input type="text" id="title" placeholder="Notification Title" required minlength="5" maxlength="100">
+                        <p class="error-message" id="titleError">No leading/trailing spaces or consecutive spaces allowed</p>
                     </div>
                     <div class="form-group">
                         <label for="message">Message</label>
-                        <textarea id="message" placeholder="Notification message..." required
-                                  pattern="^[A-Za-z0-9.,!?-]+(?:\s[A-Za-z0-9.,!?-]+)*$"
-                                  title="No leading/trailing spaces or consecutive spaces"></textarea>
-                        <p class="error-message" id="messageError">Invalid message format</p>
+                        <textarea id="message" placeholder="Notification message..." required minlength="10" maxlength="250"></textarea>
+                        <p class="error-message" id="messageError">No leading/trailing spaces or consecutive spaces allowed</p>
                     </div>
-                    <button type="submit" class="btn"><i class="fas fa-paper-plane"></i> Send Notification</button>
+                    <button type="submit" class="btn">Send Notification</button>
                 </form>
             </div>
         </div>
     </div>
 
-    <div class="confirmation" id="confirmation">
+    <div class="confirmation">
         <div class="confirmation-content">
             <img src="https://cdn.pixabay.com/animation/2023/03/20/02/45/02-45-27-186_512.gif" class="confirmation-icon" alt="Success">
             <h3 class="confirmation-title">Notification Sent!</h3>
             <p class="confirmation-message">The notification has been successfully sent.</p>
-            <button class="btn" onclick="document.getElementById('confirmation').classList.remove('show')">OK</button>
+            <button class="btn" onclick="document.querySelector('.confirmation').classList.remove('show')">OK</button>
         </div>
     </div>
 
     <script>
+
         const BASE_URL = 'http://54.166.206.245:3023';
+        const departments = ['All Departments', 'Developers', 'Testers', 'PowerBI', 'DevOps', 'HR', 'Particular Employee'];
 
         document.addEventListener('DOMContentLoaded', () => {
             const form = document.getElementById('notificationForm');
-            const confirmation = document.getElementById('confirmation');
+            const confirmation = document.querySelector('.confirmation');
             const departmentSelect = document.getElementById('department');
-            const employeeGroup = document.getElementById('employeeGroup');
-            const employeeSelect = document.getElementById('employee');
             const employeeIdGroup = document.getElementById('employeeIdGroup');
             const employeeIdInput = document.getElementById('employeeId');
 
-            // Load departments
-            async function loadDepartments() {
-                try {
-                    const response = await fetch(`${BASE_URL}/api/departments`);
-                    if (!response.ok) throw new Error('Failed to fetch departments');
-                    const departments = await response.json();
-                    departmentSelect.innerHTML = '<option value="" disabled selected>Select Department</option>';
-                    departments.forEach(dept => {
-                        const option = document.createElement('option');
-                        option.value = dept;
-                        option.textContent = dept;
-                        departmentSelect.appendChild(option);
-                    });
-                } catch (error) {
-                    console.error('Error loading departments:', error);
-                    document.getElementById('departmentError').textContent = 'Error loading departments';
-                    document.getElementById('departmentError').style.display = 'block';
-                }
+            function loadDepartments() {
+                departmentSelect.innerHTML = '<option value="" disabled selected>Select Department</option>';
+                departments.forEach(dept => {
+                    const option = document.createElement('option');
+                    option.value = dept;
+                    option.textContent = dept;
+                    departmentSelect.appendChild(option);
+                });
             }
 
-            // Load employees by department
-            async function loadEmployees(department) {
-                try {
-                    const response = await fetch(`${BASE_URL}/api/employees/${department}`);
-                    if (!response.ok) throw new Error('Failed to fetch employees');
-                    const employees = await response.json();
-                    employeeSelect.innerHTML = '<option value="" disabled selected>Select Employee</option>';
-                    employees.forEach(emp => {
-                        const option = document.createElement('option');
-                        option.value = emp.employee_id;
-                        option.textContent = emp.name;
-                        option.dataset.id = emp.employee_id;
-                        employeeSelect.appendChild(option);
-                    });
-                } catch (error) {
-                    console.error('Error loading employees:', error);
-                    document.getElementById('employeeError').textContent = 'Error loading employees';
-                    document.getElementById('employeeError').style.display = 'block';
-                }
-            }
-
-            // Event listeners
             departmentSelect.addEventListener('change', () => {
                 const department = departmentSelect.value;
-                employeeGroup.classList.toggle('hidden', department === 'All Departments' || department === 'Particular Employee' || !department);
-                employeeSelect.innerHTML = '<option value="" disabled selected>Select Employee</option>';
+                document.getElementById('departmentError').style.display = 'none';
                 employeeIdGroup.classList.toggle('hidden', department !== 'Particular Employee');
                 employeeIdInput.value = '';
-                employeeIdInput.removeAttribute('readonly');
-                if (department && department !== 'All Departments' && department !== 'Particular Employee') {
-                    loadEmployees(department);
-                }
-            });
-
-            employeeSelect.addEventListener('change', () => {
-                const selectedOption = employeeSelect.options[employeeSelect.selectedIndex];
-                const employeeId = selectedOption.dataset.id || '';
-                employeeIdGroup.classList.toggle('hidden', !employeeId);
-                employeeIdInput.value = employeeId;
-                employeeIdInput.setAttribute('readonly', 'true');
                 document.getElementById('employeeIdError').style.display = 'none';
             });
 
-            // Validation setup
-            setupValidation('employeeId', /^[ATS]{3}0(?!000)[0-9]{3}$/, 'employeeIdError', 'Invalid employee ID format (e.g., ATS0123)');
-            setupValidation('title', /^(?!\s)(?!.*\s{2})[A-Za-z0-9\s.,!?-]+(?<!\s)$/, 'titleError', 'No leading/trailing spaces or consecutive spaces');
-            setupValidation('message', /^(?!\s)(?!.*\s{2})[A-Za-z0-9\s.,!?-]+(?<!\s)$/, 'messageError', 'No leading/trailing spaces or consecutive spaces');
+            function setupValidation(fieldId, errorId, errorMessage, validator) {
+                const field = document.getElementById(fieldId);
+                const errorElement = document.getElementById(errorId);
+                field.addEventListener('input', () => {
+                    const value = field.value;
+                    const isValid = validator(value);
+                    errorElement.textContent = errorMessage;
+                    errorElement.style.display = isValid ? 'none' : 'block';
+                    field.setCustomValidity(isValid ? '' : errorMessage);
+                });
+            }
+
+            const spaceValidator = value => {
+                if (!value) return false; // Required field
+                return !/^\s|\s$|\s{2,}/.test(value); // No leading/trailing/consecutive spaces
+            };
+
+            setupValidation('employeeId', 'employeeIdError', 'Invalid employee ID format (e.g., ATS0123)', 
+                value => value === '' || /^[ATS]{3}0(?!000)[0-9]{3}$/.test(value));
+            setupValidation('title', 'titleError', 'No leading/trailing spaces or consecutive spaces allowed', 
+                value => spaceValidator(value) && /^[A-Za-z0-9.,!?-]+(\s[A-Za-z0-9.,!?-]+)*$/.test(value));
+            setupValidation('message', 'messageError', 'No leading/trailing spaces or consecutive spaces allowed', 
+                value => spaceValidator(value) && /^[A-Za-z0-9.,!?-]+(\s[A-Za-z0-9.,!?-]+)*$/.test(value));
 
             form.addEventListener('submit', async (e) => {
                 e.preventDefault();
@@ -430,6 +391,8 @@
                         const error = group.querySelector('.error-message');
                         if (input && !input.validity.valid) {
                             error.style.display = 'block';
+                        } else if (error) {
+                            error.style.display = 'none';
                         }
                     });
                     return;
@@ -438,8 +401,8 @@
                 const department = departmentSelect.value;
                 const employeeId = employeeIdInput.value.trim();
                 const notification = {
-                    employeeId: employeeId || null,
-                    department: !employeeId ? department : null,
+                    employeeId: department === 'Particular Employee' && employeeId ? employeeId : null,
+                    department: department !== 'Particular Employee' ? department : null,
                     title: document.getElementById('title').value.trim(),
                     message: document.getElementById('message').value.trim(),
                 };
@@ -453,38 +416,22 @@
 
                     if (!response.ok) {
                         const errorData = await response.json().catch(() => ({}));
-                        throw new Error(errorData.error || 'Failed to send notification');
+                        throw new Error(errorData.error || `Failed to send notification: ${response.statusText}`);
                     }
 
-                    const result = await response.json();
-                    console.log('Notification sent successfully:', result);
                     form.reset();
                     departmentSelect.value = '';
-                    employeeGroup.classList.add('hidden');
-                    employeeSelect.innerHTML = '<option value="" disabled selected>Select Employee</option>';
                     employeeIdGroup.classList.add('hidden');
                     employeeIdInput.value = '';
                     confirmation.classList.add('show');
                     setTimeout(() => confirmation.classList.remove('show'), 3000);
                 } catch (error) {
-                    console.error('Fetch error:', error.message, error.stack);
-                    document.getElementById('employeeIdError').textContent = `Error sending notification: ${error.message}`;
+                    document.getElementById('employeeIdError').textContent = `Error: ${error.message}`;
                     document.getElementById('employeeIdError').style.display = 'block';
+                    console.error('Submission error:', error);
                 }
             });
 
-            function setupValidation(fieldId, pattern, errorId, errorMessage) {
-                const field = document.getElementById(fieldId);
-                const errorElement = document.getElementById(errorId);
-                field.addEventListener('input', () => {
-                    const isValid = pattern.test(field.value.trim());
-                    errorElement.textContent = errorMessage;
-                    errorElement.style.display = isValid ? 'none' : 'block';
-                    field.setCustomValidity(isValid ? '' : errorMessage);
-                });
-            }
-
-            // Initialize
             loadDepartments();
         });
     </script>
