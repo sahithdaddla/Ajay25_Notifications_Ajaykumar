@@ -1,376 +1,1552 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee Notification Portal</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #4f46e5;
-            --secondary: #f43f5e;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --error: #ef4444;
-            --dark: #1e293b;
-            --light: #f8fafc;
-            --gray: #94a3b8;
-            --gradient-emerald: linear-gradient(135deg, #059669, #34d399);
-            --gradient-indigo: linear-gradient(135deg, #4f46e5, #818cf8);
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            --border-radius: 12px;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Employee Leave Management</title>
+<style>
+  :root {
+    --primary: #4361ee;
+    --primary-light: #4895ef;
+    --secondary: #3f37c9;
+    --accent: #f72585;
+    --dark: #1a1a2e;
+    --light: #f8f9fa;
+    --success: #4cc9f0;
+    --warning: #f8961e;
+    --danger: #ef233c;
+    --gray: #6c757d;
+    --gray-light: #e9ecef;
+    --border-radius: 12px;
+    --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--light);
-            color: var(--dark);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            padding: 20px;
-        }
-  header {
-            position: relative;
-            text-align: center;
-            height: 140px;
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-            color: #fff;
-            border-radius: 15px;
-            overflow: hidden;
-            display: flex;
-            width: 100%;
-           
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-        }
+  body {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
 
-        header h1 {
-            margin: 0;
-            font-size: 2.5rem;
-            color: white;
-            font-weight: 700;
-            letter-spacing: 1px;
-            position: relative;
-            z-index: 2;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
+  .container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
 
-        header p {
-            font-weight: 300;
-            font-size: 1.1rem;
-            margin-top: 10px;
-            opacity: 0.9;
-        }
+  h1, h2, h3 {
+    color: var(--dark);
+    font-weight: 600;
+  }
 
-        @keyframes moveCircles {
-            0% { transform: translateY(0) translateX(0); }
-            50% { transform: translateY(-50%) translateX(-50%); }
-            100% { transform: translateY(0) translateX(0); }
-        }
-        
-        .banner-background {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            overflow: hidden;
-        }
+  .banner {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    text-align: center;
+    padding: 3rem 1.5rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    position: relative;
+    overflow: hidden;
+  }
 
-        .circle {
-            position: absolute;
-            width: 200px;
-            height: 200px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            animation: moveCircles 10s infinite linear;
-        }
+  .banner::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+    transform: rotate(30deg);
+    z-index: 1;
+  }
 
-        .circle:nth-child(1) {
-            top: 10%;
-            left: 20%;
-            animation-duration: 8s;
-        }
+  .banner h1 {
+    color: white;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    position: relative;
+    z-index: 2;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
 
-        .circle:nth-child(2) {
-            top: 50%;
-            left: 70%;
-            animation-duration: 12s;
-        }
+  .banner .notification {
+    font-size: 1.125rem;
+    opacity: 0.9;
+    position: relative;
+    z-index: 2;
+    font-weight: 300;
+  }
 
-        .circle:nth-child(3) {
-            top: 80%;
-            left: 40%;
-            animation-duration: 15s;
-        }
-        .container {
-            width: 100%;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
+  .main-container {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    position: relative;
+  }
 
-        .main-content {
-            background: white;
-            border-radius: var(--border-radius);
-            padding: 2rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            animation: fadeIn 0.5s ease;
-        }
+  .card {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(20px);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    transition: var(--transition);
+  }
 
-        .form-container {
-            max-width: 400px;
-            margin-bottom: 2rem;
-        }
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+  }
 
-        .form-title {
-            font-size: 1.8rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: var(--primary);
-            background: var(--gradient-emerald);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+  .leave-request {
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 700px;
+    animation: fadeIn 0.5s ease-out;
+    position: relative;
+    margin: 0 auto;
+    transition: var(--transition);
+  }
 
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 1.5rem;
-        }
+  .main-container.has-employee-data .leave-request {
+    margin: 0;
+    flex: 1;
+  }
 
-        label {
-            font-weight: 500;
-            margin-bottom: 0.5rem;
-            color: var(--dark);
-        }
+  .leave-request h2 {
+    font-size: 1.75rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    color: var(--primary);
+    position: relative;
+  }
 
-        input {
-            padding: 0.75rem;
-            border: 1px solid var(--gray);
-            border-radius: var(--border-radius);
-            font-size: 0.95rem;
-            transition: var(--transition);
-        }
+  .leave-request h2::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(to right, var(--primary), var(--accent));
+    margin: 0.5rem auto 0;
+    border-radius: 2px;
+  }
 
-        input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
-        }
+  .form-group {
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
 
-        .error-message {
-            color: var(--error);
-            font-size: 0.8rem;
-            margin-top: 0.25rem;
-            display: none;
-        }
+  .form-group label {
+    display: block;
+    font-weight: 500;
+    color: var(--dark);
+    margin-bottom: 0.75rem;
+    font-size: 0.95rem;
+  }
 
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border-radius: var(--border-radius);
-            border: none;
-            font-weight: 500;
-            cursor: pointer;
-            transition: var(--transition);
-            background: var(--gradient-emerald);
-            color: white;
-        }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid var(--gray-light);
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: var(--transition);
+    background-color: white;
+    font-family: 'Poppins', sans-serif;
+  }
 
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-        }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    border-color: var(--primary);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+  }
 
-        .notifications-container {
-            margin-top: 2rem;
-        }
+  .form-group textarea {
+    resize: vertical;
+    min-height: 120px;
+  }
 
-        .notifications-container h2 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: var(--primary);
-        }
+  .error-message {
+    color: var(--danger);
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+    display: none;
+  }
 
-        .notification-item {
-            background: var(--light);
-            border-radius: var(--border-radius);
-            padding: 1.5rem;
-            margin-bottom: 1rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            animation: slideIn 0.5s ease;
-        }
+  #reasonCounter {
+    font-size: 0.85rem;
+    color: var(--gray);
+    text-align: right;
+    margin-top: 0.25rem;
+  }
 
-        .notification-item h3 {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--dark);
-        }
+  .form-actions {
+    text-align: center;
+    margin-top: 2rem;
+  }
 
-        .notification-item p {
-            color: var(--gray);
-            margin-bottom: 0.5rem;
-        }
+  .btn {
+    padding: 1rem 2.5rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    position: relative;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
 
-        .notification-item .timestamp {
-            font-size: 0.85rem;
-            color: var(--gray);
-        }
+  .btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s ease;
+  }
 
-        .no-data {
-            text-align: center;
-            padding: 2rem;
-            color: var(--gray);
-        }
+  .btn:hover::before {
+    left: 100%;
+  }
 
-        .no-data img {
-            width: 120px;
-            margin-bottom: 1rem;
-        }
+  .btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  }
 
-        @media (max-width: 768px) {
-            .container {
-                padding: 0 10px;
-            }
+  .btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.3);
+  }
 
-            .main-content {
-                padding: 1.5rem;
-            }
-        }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    color: white;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
+  .btn-primary:hover {
+    background: linear-gradient(135deg, var(--secondary), var(--primary));
+    box-shadow: 0 8px 20px rgba(67, 97, 238, 0.3);
+  }
 
-        @keyframes slideIn {
-            from { transform: translateY(-20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-    </style>
+  .btn-success {
+    background: linear-gradient(135deg, var(--success), #4895ef);
+    color: white;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+
+  .btn-success:hover {
+    background: linear-gradient(135deg, #4895ef, var(--success));
+    box-shadow: 0 8px 20px rgba(76, 201, 240, 0.3);
+  }
+
+  .btn-danger {
+    background: linear-gradient(135deg, var(--danger), #f72585);
+    color: white;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+
+  .btn-danger:hover {
+    background: linear-gradient(135deg, #f72585, var(--danger));
+    box-shadow: 0 8px 20px rgba(239, 35, 60, 0.3);
+  }
+
+  .submit-btn {
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: white;
+    padding: 1rem 3rem;
+    font-size: 1.1rem;
+    animation: pulse 2s infinite;
+  }
+
+  .submit-btn:hover {
+    background: linear-gradient(135deg, var(--accent), var(--primary));
+    box-shadow: 0 10px 25px rgba(67, 97, 238, 0.4);
+  }
+
+  .calendar-btn {
+    background: linear-gradient(135deg, var(--secondary), var(--primary-light));
+    padding: 1rem 2.5rem;
+    color: white;
+  }
+
+  .calendar-btn:hover {
+    background: linear-gradient(135deg, var(--primary-light), var(--secondary));
+    box-shadow: 0 8px 20px rgba(63, 55, 201, 0.3);
+  }
+
+  .apply-btn {
+    background: linear-gradient(135deg, var(--danger), var(--warning));
+    color: white;
+    padding: 0.75rem 1.25rem;
+  }
+
+  .apply-btn:hover {
+    background: linear-gradient(135deg, var(--warning), var(--danger));
+    box-shadow: 0 8px 20px rgba(239, 35, 60, 0.3);
+  }
+
+  #prevMonthBtn, #nextMonthBtn {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--primary);
+    padding: 0.75rem 1.25rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: var(--transition);
+  }
+
+  #prevMonthBtn:hover, #nextMonthBtn:hover {
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--secondary);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  #error-message {
+    color: var(--danger);
+    text-align: center;
+    margin-top: 1.5rem;
+    font-weight: 500;
+    padding: 1rem;
+    background-color: rgba(239, 35, 60, 0.1);
+    border-radius: 8px;
+    display: none;
+  }
+
+  .employee-data {
+    padding: 2.5rem;
+    flex: 1;
+    min-width: 300px;
+    animation: fadeIn 0.5s ease-out;
+    display: none;
+  }
+
+  .employee-data h2 {
+    font-size: 1.75rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    color: var(--primary);
+    position: relative;
+  }
+
+  .employee-data h2::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(to right, var(--primary), var(--accent));
+    margin: 0.5rem auto 0;
+    border-radius: 2px;
+  }
+
+  .employee-info {
+    margin-bottom: 2rem;
+    text-align: center;
+    padding: 1.5rem;
+    background-color: rgba(67, 97, 238, 0.05);
+    border-radius: 8px;
+  }
+
+  .employee-info p {
+    font-size: 1.1rem;
+    color: var(--dark);
+    font-weight: 500;
+  }
+
+  .employee-info p strong {
+    color: var(--primary);
+  }
+
+  .leave-balance {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .balance-card {
+    background: white;
+    border-radius: 10px;
+    padding: 1.75rem;
+    text-align: center;
+    transition: var(--transition);
+    border: 1px solid rgba(67, 97, 238, 0.1);
+  }
+
+  .balance-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+
+  .balance-card h3 {
+    font-size: 1.1rem;
+    color: var(--gray);
+    margin-bottom: 1rem;
+    font-weight: 500;
+  }
+
+  .balance-card p {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin: 0;
+  }
+
+  .button-container {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+  }
+
+  .leave-history {
+    margin-top: 2.5rem;
+  }
+
+  .leave-history h2 {
+    font-size: 1.5rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    color: var(--primary);
+  }
+
+  .history-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .history-card {
+    background: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: var(--transition);
+    border: 1px solid rgba(67, 97, 238, 0.1);
+  }
+
+  .history-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+
+  .history-card p {
+    font-size: 0.9rem;
+    margin: 0.75rem 0;
+    color: var(--dark);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
+  }
+
+  .history-card p strong {
+    color: var(--primary);
+    display: inline-block;
+    min-width: 90px;
+    font-weight: 500;
+  }
+
+  .no-history {
+    text-align: center;
+    color: var(--gray);
+    font-style: italic;
+    font-size: 1rem;
+    margin-top: 1rem;
+    padding: 2rem;
+    background-color: rgba(233, 236, 239, 0.5);
+    border-radius: 8px;
+  }
+
+  .calendar-container {
+    display: none;
+    flex-direction: column;
+    gap: 2rem;
+    margin: 2rem 0;
+    animation: fadeIn 0.5s ease-out;
+  }
+
+  .calendar-main {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+  }
+
+  .calendar-content {
+    flex: 2;
+    padding: 2rem;
+    min-width: 0;
+  }
+
+  .calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .calendar-header h2 {
+    font-size: 1.5rem;
+    margin: 0;
+    color: var(--primary);
+  }
+
+  .calendar-nav {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .calendar-nav button {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.5rem;
+  }
+
+  .calendar-grid div {
+    padding: 1rem;
+    text-align: center;
+    border-radius: 8px;
+    min-height: 80px;
+    position: relative;
+    background: white;
+    border: 1px solid var(--gray-light);
+    transition: var(--transition);
+  }
+
+  .calendar-grid .day-name {
+    background: var(--primary);
+    color: white;
+    font-weight: 600;
+    border: none;
+    padding: 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  .calendar-grid .day {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
+  }
+
+  .leave-info {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
+  }
+
+  .calendar-grid .day:hover {
+    background: rgba(67, 97, 238, 0.05);
+  }
+
+  .calendar-grid .other-month {
+    background: var(--gray-light);
+    color: var(--gray);
+    opacity: 0.6;
+  }
+
+  .leave-day {
+    background: linear-gradient(135deg, rgba(67, 97, 238, 0.1), rgba(76, 201, 240, 0.1)) !important;
+    border: 1px solid var(--primary) !important;
+    color: var(--primary);
+    font-weight: 600;
+  }
+
+  .leave-day .leave-info {
+    display: none;
+    position: absolute;
+    background: white;
+    color: var(--dark);
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    width: 250px;
+    left: 100%;
+    top: 0;
+    font-size: 0.8rem;
+    text-align: left;
+    border: 1px solid var(--gray-light);
+  }
+
+  .leave-day:hover .leave-info {
+    display: block;
+  }
+
+  .today {
+    background: var(--primary) !important;
+    color: white !important;
+    font-weight: 700 !important;
+    border: none !important;
+  }
+
+  .leave-details-card {
+    flex: 1;
+    padding: 2rem;
+    min-width: 300px;
+    max-height: 600px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .leave-details-content {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 0.75rem;
+  }
+
+  .leave-details-content::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .leave-details-content::-webkit-scrollbar-track {
+    background: var(--gray-light);
+    border-radius: 4px;
+  }
+
+  .leave-details-content::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 4px;
+  }
+
+  .leave-details-card h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--primary);
+  }
+
+  .leave-details-card .no-requests {
+    text-align: center;
+    color: var(--gray);
+    font-style: italic;
+    padding: 2rem;
+    background-color: rgba(233, 236, 239, 0.5);
+    border-radius: 8px;
+  }
+
+  .leave-details-card .leave-item {
+    background: white;
+    padding: 1.25rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    border: 1px solid var(--gray-light);
+    transition: var(--transition);
+  }
+
+  .leave-details-card .leave-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  }
+
+  .leave-details-card .leave-item p {
+    margin: 0.5rem 0;
+    color: var(--dark);
+  }
+
+  .leave-details-card .leave-item p strong {
+    color: var(--primary);
+    font-weight: 500;
+  }
+
+  .status-badge {
+    display: inline-block;
+    padding: 0.35rem 0.75rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .status-approved {
+    background-color: rgba(76, 201, 240, 0.1);
+    color: var(--success);
+  }
+
+  .status-pending {
+    background-color: rgba(248, 150, 30, 0.1);
+    color: var(--warning);
+  }
+
+  .status-rejected {
+    background-color: rgba(239, 35, 60, 0.1);
+    color: var(--danger);
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+  }
+
+  @media (min-width: 1024px) {
+    .main-container {
+      flex-wrap: nowrap;
+    }
+
+    .calendar-main {
+      flex-wrap: nowrap;
+    }
+
+    .calendar-content {
+      flex: 3;
+    }
+
+    .leave-details-card {
+      flex: 1;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      padding: 1.5rem;
+    }
+
+    .banner h1 {
+      font-size: 2rem;
+    }
+
+    .banner .notification {
+      font-size: 1rem;
+    }
+
+    .main-container {
+      flex-direction: column;
+    }
+
+    .leave-request,
+    .employee-data {
+      max-width: 100%;
+      padding: 1.75rem;
+    }
+
+    .leave-balance {
+      grid-template-columns: 1fr;
+    }
+
+    .history-cards {
+      grid-template-columns: 1fr;
+    }
+
+    .button-container {
+      flex-direction: column;
+    }
+
+    .btn {
+      width: 100%;
+    }
+
+    .calendar-grid div {
+      padding: 0.75rem;
+      min-height: 70px;
+      font-size: 0.9rem;
+    }
+
+    .leave-day .leave-info {
+      width: 200px;
+      left: 50%;
+      transform: translateX(-50%);
+      top: 100%;
+    }
+
+    .calendar-content,
+    .leave-details-card {
+      padding: 1.5rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .banner {
+      padding: 2rem 1rem;
+    }
+
+    .banner h1 {
+      font-size: 1.75rem;
+    }
+
+    .leave-request,
+    .employee-data {
+      padding: 1.5rem 1.25rem;
+    }
+
+    .calendar-grid div {
+      padding: 0.5rem;
+      min-height: 60px;
+      font-size: 0.8rem;
+    }
+
+    .leave-day .leave-info {
+      width: 180px;
+      font-size: 0.7rem;
+    }
+  }
+</style>
 </head>
 <body>
-       <header>
-        <div class="banner-background">
-            <div class="circle"></div>
-            <div class="circle"></div>
-            <div class="circle"></div>
-        </div>
-        <h1>Employee Notifications</h1>
-        <p>Stay informed with the latest updates</p>
-    </header>
+  <section class="banner container">
+    <h1>Employee Leave Management</h1>
+    <p class="notification">Please enter your details below to submit a leave request.</p>
+  </section>
 
-
-    <div class="container">
-        <div class="main-content">
-            <div class="form-container">
-                <h2 class="form-title">View Notifications</h2>
-                <div class="form-group">
-                    <label for="employeeId">Employee ID</label>
-                    <input type="text" id="employeeId" placeholder="e.g., ATS0123" required
-                           pattern="^[ATS]{3}0(?!000)[0-9]{3}$"
-                           title="Employee ID must be ATS0xxx (e.g., ATS0123, not ATS0000)">
-                    <p class="error-message" id="employeeIdError">Invalid employee ID format</p>
-                </div>
-                <button class="btn" onclick="fetchNotifications()"><i class="fas fa-search"></i> View Notifications</button>
-            </div>
-            <div class="notifications-container">
-                <h2>Notifications</h2>
-                <div id="notificationsList"></div>
-            </div>
+  <div class="main-container container">
+    <section class="leave-request card">
+      <h2>Request Leave</h2>
+      <form id="leaveRequestForm">
+        <div class="form-group">
+          <label for="Empid">Employee ID:</label>
+          <input 
+            type="text" 
+            id="Empid" 
+            name="Empid" 
+            required 
+            maxlength="7"
+            placeholder="ATS0XXX"
+            pattern="^ATS0(?!000)\d{3}$"
+            title="Emp-ID must be ATS0 followed by 3 digits (001-999)"
+          >
+          <small class="error-message" id="empIdError"></small>
         </div>
+        <div class="form-group">
+          <label for="empName">Employee Name:</label>
+          <input 
+            type="text" 
+            id="empName" 
+            name="empName" 
+            required 
+            maxlength="45"
+            placeholder="Enter your name"
+            pattern="[A-Za-z\s\.,\-]{1,45}"
+            title="Name must be 1-50 characters, letters, spaces, or basic punctuation"
+          >
+          <small class="error-message" id="empNameError"></small>
+        </div>
+        <div class="form-group">
+          <label for="leaveType">Leave Type:</label>
+          <select id="leaveType" name="leaveType" required>
+            <option value="">Select leave type</option>
+            <option value="Annual Leave">Annual Leave</option>
+            <option value="Sick Leave">Sick Leave</option>
+            <option value="Casual Leave">Casual Leave</option>
+          </select>
+          <small class="error-message" id="leaveTypeError"></small>
+        </div>
+        <div class="form-group">
+          <label for="startDate">Start Date:</label>
+          <input 
+            type="date" 
+            id="startDate" 
+            name="startDate"
+            required
+          >
+          <small class="error-message" id="startDateError"></small>
+        </div>
+        <div class="form-group">
+          <label for="endDate">End Date:</label>
+          <input 
+            type="date" 
+            id="endDate" 
+            name="endDate"
+            required
+          >
+          <small class="error-message" id="endDateError"></small>
+        </div>
+        <div class="form-group">
+          <label for="reason">Reason:</label>
+          <textarea 
+            id="reason" 
+            name="reason"
+            rows="4" 
+            required
+            maxlength="500"
+            placeholder="Enter reason for leave"
+            title="Reason must be 3-100 words"
+          ></textarea>
+          <small id="reasonCounter">Words: 0/100</small>
+          <small class="error-message" id="reasonError"></small>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="submit-btn">Submit Request</button>
+        </div>
+      </form>
+      <p id="error-message" style="display: none;"></p>
+    </section>
+
+    <section class="employee-data card" id="employeeDataSection">
+      <h2>Employee Leave Details</h2>
+      <div class="employee-info">
+        <p><strong>Name:</strong> <span id="employeeName">N/A</span></p>
+      </div>
+      <div class="leave-balance">
+        <div class="balance-card">
+          <h3>Annual Leave</h3>
+          <p><span id="annualLeaveBalance">10</span> days</p>
+        </div>
+        <div class="balance-card">
+          <h3>Sick Leave</h3>
+          <p><span id="sickLeaveBalance">5</span> days</p>
+        </div>
+        <div class="balance-card">
+          <h3>Casual Leave</h3>
+          <p><span id="casualLeaveBalance">8</span> days</p>
+        </div>
+      </div>
+      <div class="button-container">
+        <button id="calendarBtn" class="calendar-btn">View Calendar</button>
+      </div>
+      <div class="leave-history">
+        <h2>Leave History</h2>
+        <div class="history-cards" id="leaveHistoryCards"></div>
+      </div>
+    </section>
+  </div>
+
+  <section class="calendar-container container">
+    <div class="calendar-main">
+      <div class="calendar-content">
+        <div class="calendar-header">
+          <h2 id="calendarTitle"></h2>
+          <div class="calendar-nav">
+            <button id="prevMonthBtn">Previous Month</button>
+            <button id="nextMonthBtn">Next Month</button>
+            <button id="applyBtn" class="apply-btn">Back</button>
+          </div>
+        </div>
+        <div class="calendar-grid" id="calendarGrid"></div>
+      </div>
+      <div class="leave-details-card">
+        <h2>Leave Details</h2>
+        <div class="leave-details-content" id="leaveDetailsContent"></div>
+      </div>
     </div>
+  </section>
 
-    <script>
-        const BASE_URL = 'http://54.166.206.245:3023';
+  <script>
+    // Utility functions
+    function countWords(text) {
+      const words = text.trim() ? text.trim().split(/\s+/) : [];
+      return words.filter(word => word.length > 0).length;
+    }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const employeeIdInput = document.getElementById('employeeId');
-            const notificationsList = document.getElementById('notificationsList');
+    function isWithinSixMonths(date) {
+      const today = new Date();
+      const sixMonthsFromNow = new Date();
+      sixMonthsFromNow.setMonth(today.getMonth() + 6);
+      return date <= sixMonthsFromNow;
+    }
 
-            setupValidation('employeeId', /^[ATS]{3}0(?!000)[0-9]{3}$/, 'employeeIdError', 'Invalid employee ID format (e.g., ATS0123)');
+    function isValidDateFormat(dateString) {
+      const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+      if (!datePattern.test(dateString)) return false;
+      const date = new Date(dateString);
+      return !isNaN(date.getTime());
+    }
 
-            async function fetchNotifications() {
-                const employeeId = employeeIdInput.value.trim();
-                const errorElement = document.getElementById('employeeIdError');
+    // Validation functions
+    function validateEmpId(empId, errorElement) {
+      if (!errorElement) return false;
+      if (!empId) {
+        errorElement.textContent = "Employee ID is required.";
+        errorElement.style.display = "block";
+        return false;
+      }
+      if (!/^ATS0(?!000)\d{3}$/.test(empId)) {
+        errorElement.textContent = "Emp-ID must be ATS0 followed by 3 digits (001-999).";
+        errorElement.style.display = "block";
+        return false;
+      }
+      errorElement.style.display = "none";
+      return true;
+    }
 
-                if (!/^[ATS]{3}0(?!000)[0-9]{3}$/.test(employeeId)) {
-                    errorElement.style.display = 'block';
-                    return;
-                }
+    function validateEmpName(empName, errorElement) {
+      if (!errorElement) return false;
+      if (!empName) {
+        errorElement.textContent = "Employee name is required.";
+        errorElement.style.display = "block";
+        return false;
+      }
+      if (!/^[A-Za-z\s.,-]{1,45}$/.test(empName)) {
+        errorElement.textContent = "Name must be 1-50 characters, letters, spaces, or basic punctuation.";
+        errorElement.style.display = "block";
+        return false;
+      }
+      errorElement.style.display = "none";
+      return true;
+    }
 
-                try {
-                    const response = await fetch(`${BASE_URL}/api/notifications/${employeeId}`);
-                    if (!response.ok) {
-                        const error = await response.json();
-                        throw new Error(error.error || 'Failed to fetch notifications');
-                    }
-                    const notifications = await response.json();
-                    displayNotifications(notifications);
-                } catch (error) {
-                    console.error('Error:', error);
-                    errorElement.textContent = error.message;
-                    errorElement.style.display = 'block';
-                    notificationsList.innerHTML = `
-                        <div class="no-data">
-                            <img src="https://cdn-icons-png.flaticon.com/512/4076/4076478.png" alt="No Data">
-                            <p>${error.message}</p>
-                        </div>
-                    `;
-                }
-            }
+    function validateLeaveType(leaveType, errorElement) {
+      if (!errorElement) return false;
+      if (!leaveType) {
+        errorElement.textContent = "Please select a leave type.";
+        errorElement.style.display = "block";
+        return false;
+      }
+      errorElement.style.display = "none";
+      return true;
+    }
 
-            function displayNotifications(notifications) {
-                notificationsList.innerHTML = '';
-                if (notifications.length === 0) {
-                    notificationsList.innerHTML = `
-                        <div class="no-data">
-                            <img src="https://cdn-icons-png.flaticon.com/512/4076/4076478.png" alt="No Data">
-                            <p>No notifications found</p>
-                        </div>
-                    `;
-                    return;
-                }
+    function validateStartDate(startDateStr, errorElement) {
+      if (!errorElement) return false;
+      if (!startDateStr) {
+        errorElement.textContent = "Start date is required.";
+        errorElement.style.display = "block";
+        return false;
+      }
+      if (!isValidDateFormat(startDateStr)) {
+        errorElement.textContent = "Invalid start date format. Use YYYY-MM-DD.";
+        errorElement.style.display = "block";
+        return false;
+      }
+      const startDate = new Date(startDateStr);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      if (startDate < today) {
+        errorElement.textContent = "Start date cannot be in the past.";
+        errorElement.style.display = "block";
+        return false;
+      }
+      if (!isWithinSixMonths(startDate)) {
+        errorElement.textContent = "Start date cannot be more than 6 months in the future.";
+        errorElement.style.display = "block";
+        return false;
+      }
+      errorElement.style.display = "none";
+      return true;
+    }
 
-                notifications.forEach((notif, index) => {
-                    const item = document.createElement('div');
-                    item.className = 'notification-item';
-                    item.style.animationDelay = `${index * 0.1}s`;
-                    item.innerHTML = `
-                        <h3>${notif.title}</h3>
-                        <p>${notif.message}</p>
-                        <div class="timestamp">${new Date(notif.created_at).toLocaleString()}</div>
-                    `;
-                    notificationsList.appendChild(item);
-                });
-            }
+    function validateEndDate(endDateStr, startDateStr, errorElement) {
+      if (!errorElement) return false;
+      if (!endDateStr) {
+        errorElement.textContent = "End date is required.";
+        errorElement.style.display = "block";
+        return false;
+      }
+      if (!isValidDateFormat(endDateStr)) {
+        errorElement.textContent = "Invalid end date format. Use YYYY-MM-DD.";
+        errorElement.style.display = "block";
+        return false;
+      }
+      const endDate = new Date(endDateStr);
+      const startDate = startDateStr ? new Date(startDateStr) : null;
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      if (!isWithinSixMonths(endDate)) {
+        errorElement.textContent = "End date cannot be more than 6 months in the future.";
+        errorElement.style.display = "block";
+        return false;
+      }
+      if (startDate && endDate < startDate) {
+        errorElement.textContent = "End date cannot be earlier than start date.";
+        errorElement.style.display = "block";
+        return false;
+      }
+      errorElement.style.display = "none";
+      return true;
+    }
 
-            function setupValidation(fieldId, pattern, errorId, errorMessage) {
-                const field = document.getElementById(fieldId);
-                const errorElement = document.getElementById(errorId);
-                field.addEventListener('input', () => {
-                    const isValid = pattern.test(field.value.trim());
-                    errorElement.textContent = errorMessage;
-                    errorElement.style.display = isValid ? 'none' : 'block';
-                    field.setCustomValidity(isValid ? '' : errorMessage);
-                });
-            }
+    function validateReason(textarea, errorElement) {
+      if (!errorElement || !textarea) return false;
+      const reasonText = textarea.value;
+      const wordCount = countWords(reasonText);
+      const hasSpecialChars = /[^a-zA-Z0-9 ,.!?]/.test(reasonText);
+      const hasMultipleSpaces = /\s{2,}/.test(reasonText);
 
-            window.fetchNotifications = fetchNotifications;
+      document.getElementById("reasonCounter").textContent = `Words: ${wordCount}/100`;
+
+      if (!reasonText.trim()) {
+        errorElement.textContent = "Reason is required.";
+        errorElement.style.display = "block";
+        textarea.setCustomValidity("Required");
+        return false;
+      }
+      if (hasSpecialChars) {
+        errorElement.textContent = "Only letters, numbers, and basic punctuation allowed.";
+        errorElement.style.display = "block";
+        textarea.setCustomValidity("Invalid characters");
+        return false;
+      }
+      if (hasMultipleSpaces) {
+        errorElement.textContent = "Multiple consecutive spaces not allowed.";
+        errorElement.style.display = "block";
+        textarea.setCustomValidity("Multiple spaces");
+        return false;
+      }
+      if (wordCount > 100) {
+        errorElement.textContent = "Reason cannot exceed 100 words.";
+        errorElement.style.display = "block";
+        textarea.setCustomValidity("Too long");
+        return false;
+      }
+      if (wordCount < 3) {
+        errorElement.textContent = "Reason must be at least 3 words.";
+        errorElement.style.display = "block";
+        textarea.setCustomValidity("Too short");
+        return false;
+      }
+      errorElement.style.display = "none";
+      textarea.setCustomValidity("");
+      return true;
+    }
+
+    // API functions
+    async function fetchLeaveBalances(empId) {
+      try {
+        const response = await fetch(`http://localhost:3000/api/leave-balances/${empId}`, {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' }
         });
-    </script>
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'Failed to fetch leave balances');
+        }
+        const data = await response.json();
+        return {
+          emp_name: data.emp_name || document.getElementById("empName")?.value.trim() || 'N/A',
+          annual: data.annual,
+          sick: data.sick,
+          casual: data.casual
+        };
+      } catch (error) {
+        console.error('Error fetching leave balances:', error.message);
+        return {
+          emp_name: document.getElementById("empName")?.value.trim() || 'N/A',
+          annual: 10,
+          sick: 5,
+          casual: 8
+        };
+      }
+    }
+
+    async function fetchLeaveHistory(empId) {
+      try {
+        const response = await fetch(`http://localhost:3000/api/leave-requests/${empId}`, {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' }
+        });
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'Failed to fetch leave history');
+        }
+        return await response.json();
+      } catch (error) {
+        console.error('Error fetching leave history:', error);
+        return [];
+      }
+    }
+
+    async function submitLeaveRequest(request) {
+      try {
+        const response = await fetch('http://localhost:3000/api/leave-requests', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(request)
+        });
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'Failed to submit leave request');
+        }
+        return await response.json();
+      } catch (error) {
+        console.error('Error submitting leave request:', error);
+        throw error;
+      }
+    }
+
+    // Date formatting functions
+    function formatDateDisplay(dateStr) {
+      const date = new Date(dateStr);
+      return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+    }
+
+    function formatDateForSubmission(date) {
+      return date.toISOString().split("T")[0];
+    }
+
+    // Load leave details
+    async function loadLeaveDetails(empId) {
+      const leaveDetailsContent = document.getElementById("leaveDetailsContent");
+      if (!leaveDetailsContent) return;
+
+      leaveDetailsContent.innerHTML = "";
+
+      const leaveRequests = await fetchLeaveHistory(empId);
+      if (leaveRequests.length === 0) {
+        leaveDetailsContent.innerHTML = '<p class="no-requests">No leave requests found.</p>';
+        return;
+      }
+
+      const balance = await fetchLeaveBalances(empId).catch(() => ({
+        emp_name: 'N/A'
+      }));
+      const empName = balance.emp_name || 'N/A';
+
+      leaveRequests.forEach(request => {
+        const leaveItem = document.createElement("div");
+        leaveItem.classList.add("leave-item");
+        leaveItem.innerHTML = `
+          <p><strong>Emp-ID:</strong> ${request.emp_id}</p>
+          <p><strong>Name:</strong> ${empName}</p>
+          <p><strong>Type:</strong> ${request.leave_type}</p>
+          <p><strong>Start:</strong> ${formatDateDisplay(request.start_date)}</p>
+          <p><strong>End:</strong> ${formatDateDisplay(request.end_date)}</p>
+          <p><strong>Reason:</strong> ${request.reason}</p>
+          <p><strong>Status:</strong> <span class="status-badge status-${request.status.toLowerCase()}">${request.status}</span></p>
+        `;
+        leaveDetailsContent.appendChild(leaveItem);
+      });
+    }
+
+    // Load employee data
+    async function loadEmployeeData(empId) {
+      const employeeDataSection = document.getElementById("employeeDataSection");
+      const employeeName = document.getElementById("employeeName");
+      const annualLeaveBalance = document.getElementById("annualLeaveBalance");
+      const sickLeaveBalance = document.getElementById("sickLeaveBalance");
+      const casualLeaveBalance = document.getElementById("casualLeaveBalance");
+      const leaveHistoryCards = document.getElementById("leaveHistoryCards");
+      const errorMessageElement = document.getElementById("error-message");
+      const mainContainer = document.querySelector('.main-container');
+
+      if (!employeeDataSection || !employeeName || !annualLeaveBalance || !sickLeaveBalance || !casualLeaveBalance || !leaveHistoryCards || !mainContainer) {
+        console.error('One or more DOM elements not found.');
+        return;
+      }
+
+      try {
+        const balances = await fetchLeaveBalances(empId);
+        employeeName.textContent = balances.emp_name || 'N/A';
+        annualLeaveBalance.textContent = balances.annual;
+        sickLeaveBalance.textContent = balances.sick;
+        casualLeaveBalance.textContent = balances.casual;
+        
+        employeeDataSection.style.display = "block";
+        mainContainer.classList.add('has-employee-data');
+        if (errorMessageElement) errorMessageElement.style.display = "none";
+
+        const leaveRequests = await fetchLeaveHistory(empId);
+        leaveHistoryCards.innerHTML = "";
+
+        if (leaveRequests.length === 0) {
+          leaveHistoryCards.innerHTML = '<p class="no-history">No leave history found.</p>';
+          return;
+        }
+
+        const empName = balances.emp_name || 'N/A';
+        leaveRequests.forEach(request => {
+          const card = document.createElement("div");
+          card.classList.add("history-card");
+          card.innerHTML = `
+            <p><strong>Emp-ID:</strong> ${request.emp_id}</p>
+            <p><strong>Name:</strong> ${empName}</p>
+            <p><strong>Type:</strong> ${request.leave_type}</p>
+            <p><strong>Start:</strong> ${formatDateDisplay(request.start_date)}</p>
+            <p><strong>End:</strong> ${formatDateDisplay(request.end_date)}</p>
+            <p><strong>Status:</strong> <span class="status-badge status-${request.status.toLowerCase()}">${request.status}</span></p>
+            <p><strong>Reason:</strong> ${request.reason}</p>
+          `;
+          leaveHistoryCards.appendChild(card);
+        });
+      } catch (error) {
+        if (errorMessageElement) {
+          errorMessageElement.textContent = error.message === 'Employee not found' 
+            ? "Employee not found. Please submit a leave request to register."
+            : error.message || "Failed to fetch employee data.";
+          errorMessageElement.style.display = "block";
+        }
+        employeeDataSection.style.display = "none";
+        mainContainer.classList.remove('has-employee-data');
+      }
+    }
+
+    // Calendar generation
+    async function generateCalendar(month, year, empId) {
+      const calendarGrid = document.getElementById("calendarGrid");
+      const calendarTitle = document.getElementById("calendarTitle");
+      if (!calendarGrid || !calendarTitle) return;
+
+      calendarGrid.innerHTML = "";
+      calendarTitle.textContent = `${new Date(year, month).toLocaleString("default", { month: "long" })} ${year}`;
+
+      const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+      daysOfWeek.forEach(day => {
+        const dayName = document.createElement("div");
+        dayName.classList.add("day-name");
+        dayName.textContent = day;
+        calendarGrid.appendChild(dayName);
+      });
+
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const prevMonthDays = new Date(year, month, 0).getDate();
+
+      const leaveRequests = await fetchLeaveHistory(empId);
+      const approvedLeaves = leaveRequests.filter(req => req.status === "Approved");
+
+      for (let i = 0; i < firstDay; i++) {
+        const emptyDay = document.createElement("div");
+        emptyDay.classList.add("day", "other-month");
+        emptyDay.textContent = prevMonthDays - firstDay + i + 1;
+        calendarGrid.appendChild(emptyDay);
+      }
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const dayDiv = document.createElement("div");
+        dayDiv.classList.add("day");
+        dayDiv.textContent = day;
+
+        const today = new Date();
+        if (
+          day === today.getDate() &&
+          month === today.getMonth() &&
+          year === today.getFullYear()
+        ) {
+          dayDiv.classList.add("today");
+        }
+
+        const currentDateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+        const leavesOnDay = approvedLeaves.filter(leave => {
+          return currentDateStr >= leave.start_date && currentDateStr <= leave.end_date;
+        });
+
+        if (leavesOnDay.length > 0) {
+          dayDiv.classList.add("leave-day");
+          try {
+            const balance = await fetchLeaveBalances(empId);
+            const empName = balance.emp_name || 'N/A';
+            leavesOnDay.forEach(leave => {
+              const leaveInfo = document.createElement("div");
+              leaveInfo.classList.add("leave-info");
+              leaveInfo.innerHTML = `
+                <strong>${leave.leave_type}</strong><br>
+                Emp-ID: ${leave.emp_id}<br>
+                Name: ${empName}<br>
+                Reason: ${leave.reason}
+              `;
+              dayDiv.appendChild(leaveInfo);
+            });
+          } catch {
+            leavesOnDay.forEach(leave => {
+              const leaveInfo = document.createElement("div");
+              leaveInfo.classList.add("leave-info");
+              leaveInfo.innerHTML = `
+                <strong>${leave.leave_type}</strong><br>
+                Emp-ID: ${leave.emp_id}<br>
+                Name: N/A<br>
+                Reason: ${leave.reason}
+              `;
+              dayDiv.appendChild(leaveInfo);
+            });
+          }
+        }
+
+        calendarGrid.appendChild(dayDiv);
+      }
+
+      const lastDay = new Date(year, month + 1, 0).getDay();
+      for (let i = 1; i <= 6 - lastDay; i++) {
+        const emptyDay = document.createElement("div");
+        emptyDay.classList.add("day", "other-month");
+        emptyDay.textContent = i;
+        calendarGrid.appendChild(emptyDay);
+      }
+    }
+
+    // Main event listener
+    document.addEventListener("DOMContentLoaded", function () {
+      const leaveRequestSection = document.querySelector(".leave-request");
+      const employeeDataSection = document.getElementById("employeeDataSection");
+      const calendarSection = document.querySelector(".calendar-container");
+      const calendarBtn = document.getElementById("calendarBtn");
+      const applyBtn = document.getElementById("applyBtn");
+      const prevMonthBtn = document.getElementById("prevMonthBtn");
+      const nextMonthBtn = document.getElementById("nextMonthBtn");
+
+      const empIdInput = document.getElementById("Empid");
+      const empNameInput = document.getElementById("empName");
+      const leaveTypeInput = document.getElementById("leaveType");
+      const startDateInput = document.getElementById("startDate");
+      const endDateInput = document.getElementById("endDate");
+      const reasonInput = document.getElementById("reason");
+
+      const empIdError = document.getElementById("empIdError");
+      const empNameError = document.getElementById("empNameError");
+      const leaveTypeError = document.getElementById("leaveTypeError");
+      const startDateError = document.getElementById("startDateError");
+      const endDateError = document.getElementById("endDateError");
+      const reasonError = document.getElementById("reasonError");
+
+      if (!leaveRequestSection || !employeeDataSection || !calendarSection || !calendarBtn || !applyBtn || !prevMonthBtn || !nextMonthBtn || !empIdInput || !empNameInput || !leaveTypeInput || !startDateInput || !endDateInput || !reasonInput) {
+        console.error('One or more critical DOM elements not found.');
+        return;
+      }
+
+      let currentDate = new Date();
+      let currentMonth = currentDate.getMonth();
+      let currentYear = currentDate.getFullYear();
+      let empId = null;
+
+      // Initialize visibility
+      leaveRequestSection.style.display = "block";
+      employeeDataSection.style.display = "none";
+      calendarSection.style.display = "none";
+
+      // Input event listeners for real-time validation
+      empIdInput.addEventListener("input", () => validateEmpId(empIdInput.value.trim(), empIdError));
+      empIdInput.addEventListener("blur", async () => {
+        const valid = validateEmpId(empIdInput.value.trim(), empIdError);
+        if (valid) {
+          empId = empIdInput.value.trim();
+          await loadEmployeeData(empId);
+          await loadLeaveDetails(empId);
+        }
+      });
+
+      empNameInput.addEventListener("input", () => validateEmpName(empNameInput.value.trim(), empNameError));
+      empNameInput.addEventListener("blur", () => validateEmpName(empNameInput.value.trim(), empNameError));
+
+      leaveTypeInput.addEventListener("change", () => validateLeaveType(leaveTypeInput.value, leaveTypeError));
+      leaveTypeInput.addEventListener("blur", () => validateLeaveType(leaveTypeInput.value, leaveTypeError));
+
+      startDateInput.addEventListener("input", () => validateStartDate(startDateInput.value, startDateError));
+      startDateInput.addEventListener("blur", () => validateStartDate(startDateInput.value, startDateError));
+
+      endDateInput.addEventListener("input", () => validateEndDate(endDateInput.value, startDateInput.value, endDateError));
+      endDateInput.addEventListener("blur", () => validateEndDate(endDateInput.value, startDateInput.value, endDateError));
+
+      reasonInput.addEventListener("input", () => validateReason(reasonInput, reasonError));
+      reasonInput.addEventListener("blur", () => validateReason(reasonInput, reasonError));
+
+      // Navigation button listeners
+      calendarBtn.addEventListener("click", async () => {
+        if (!empId) {
+          if (empIdError) {
+            empIdError.textContent = "Please enter a valid Employee ID.";
+            empIdError.style.display = "block";
+          }
+          return;
+        }
+        calendarSection.style.display = "flex";
+        leaveRequestSection.style.display = "none";
+        employeeDataSection.style.display = "none";
+        await generateCalendar(currentMonth, currentYear, empId);
+        await loadLeaveDetails(empId);
+      });
+
+      applyBtn.addEventListener("click", () => {
+        leaveRequestSection.style.display = "block";
+        employeeDataSection.style.display = empId ? "block" : "none";
+        calendarSection.style.display = "none";
+      });
+
+      prevMonthBtn.addEventListener("click", async () => {
+        currentMonth--;
+        if (currentMonth < 0) {
+          currentMonth = 11;
+          currentYear--;
+        }
+        await generateCalendar(currentMonth, currentYear, empId);
+      });
+
+      nextMonthBtn.addEventListener("click", async () => {
+        currentMonth++;
+        if (currentMonth > 11) {
+          currentMonth = 0;
+          currentYear++;
+        }
+        await generateCalendar(currentMonth, currentYear, empId);
+      });
+
+      // Form submission
+      document.getElementById("leaveRequestForm").addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        const empIdValid = validateEmpId(empIdInput.value.trim(), empIdError);
+        const empNameValid = validateEmpName(empNameInput.value.trim(), empNameError);
+        const leaveTypeValid = validateLeaveType(leaveTypeInput.value, leaveTypeError);
+        const startDateValid = validateStartDate(startDateInput.value, startDateError);
+        const endDateValid = validateEndDate(endDateInput.value, startDateInput.value, endDateError);
+        const reasonValid = validateReason(reasonInput, reasonError);
+
+        const errorMessageElement = document.getElementById("error-message");
+
+        if (!empIdValid || !empNameValid || !leaveTypeValid || !startDateValid || !endDateValid || !reasonValid) {
+          if (errorMessageElement) {
+            errorMessageElement.textContent = "Please correct the errors in the form.";
+            errorMessageElement.style.display = "block";
+          }
+          return;
+        }
+
+        try {
+          empId = empIdInput.value.trim();
+          const leaveRequest = {
+            Empid: empId,
+            emp_name: empNameInput.value.trim(),
+            leaveType: leaveTypeInput.value,
+            startDate: formatDateForSubmission(new Date(startDateInput.value)),
+            endDate: formatDateForSubmission(new Date(endDateInput.value)),
+            reason: reasonInput.value,
+            submittedDate: formatDateForSubmission(new Date())
+          };
+
+          await submitLeaveRequest(leaveRequest);
+          await loadEmployeeData(empId);
+          await loadLeaveDetails(empId);
+          document.getElementById("leaveRequestForm").reset();
+          document.getElementById("reasonCounter").textContent = "Words: 0/100";
+          if (errorMessageElement) errorMessageElement.style.display = "none";
+          alert("Leave request submitted successfully!");
+        } catch (error) {
+          if (errorMessageElement) {
+            errorMessageElement.textContent = error.message || "Failed to submit leave request.";
+            errorMessageElement.style.display = "block";
+          }
+        }
+      });
+    });
+  </script>
 </body>
 </html>
