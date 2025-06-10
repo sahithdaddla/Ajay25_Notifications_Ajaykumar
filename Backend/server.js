@@ -43,7 +43,7 @@ async function createTables() {
 
 // CORS configuration
 const corsOptions = {
-   origin: [
+    origin: [
         'http://127.0.0.1:5503',
         'http://localhost:5503',
         'http://3.88.203.125:3601',
@@ -108,6 +108,10 @@ app.get('/api/employees/:department', async (req, res) => {
 app.post('/api/notifications', async (req, res) => {
     const { employeeId, department, title, message } = req.body;
     console.log('Creating notification:', { employeeId, department, title });
+    if (!title || !message) {
+        console.log('Missing required fields');
+        return res.status(400).json({ error: 'Title and message are required' });
+    }
     try {
         const result = await pool.query(
             'INSERT INTO notifications (employee_id, department, title, message, created_at) VALUES ($1, $2, $3, $4, NOW()) RETURNING *',
@@ -134,10 +138,10 @@ app.get('/api/notifications/:employeeId', async (req, res) => {
         console.log(`Department for employee: ${department}`);
 
         const result = await pool.query(
-            `SELECT * FROM notifications 
-             WHERE employee_id = $1 
-             OR department = $2 
-             OR department = 'All Departments' 
+            `SELECT * FROM notifications
+             WHERE employee_id = $1
+             OR department = $2
+             OR department = 'All Departments'
              ORDER BY created_at DESC`,
             [employeeId, department]
         );

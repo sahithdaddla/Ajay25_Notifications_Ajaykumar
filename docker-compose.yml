@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    ports:
+      - "3601:3601"
+    environment:
+      - PG_HOST=postgres
+      - PG_USER=postgres
+      - PG_PASSWORD=admin123
+      - PG_DATABASE=new_employee_db
+      - PG_PORT=5432
+      - PORT=3601
+    depends_on:
+      - postgres
+    networks:
+      - app-network
+    volumes:
+      - ./Backend:/app
+      - ./Backend/.env:/app/.env
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
+    ports:
+      - "7102:80"
+    networks:
+      - app-network
+    volumes:
+      - ./Frontend:/app
+    restart: unless-stopped
+
+  hr_page:
+    build:
+      context: ./Hr_page
+      dockerfile: Dockerfile
+    ports:
+      - "7103:80"
+    networks:
+      - app-network
+    volumes:
+      - ./Hr_page:/app
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:16
+    ports:
+      - "5701:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin123
+      - POSTGRES_DB=new_employee_db
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+    restart: unless-stopped
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
