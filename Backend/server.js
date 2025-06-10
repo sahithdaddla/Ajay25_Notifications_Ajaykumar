@@ -6,16 +6,19 @@ require('dotenv').config();
 console.log('Starting server setup...');
 
 const app = express();
-const port = process.env.PORT || 3023;
- 
+const port = process.env.PORT || 3601;
+const host = '0.0.0.0'; // Bind to all interfaces
+
+// Database connection pool
 const pool = new Pool({
     user: process.env.PG_USER || 'postgres',
-    host: process.env.PG_HOST || '54.166.206.245',
+    host: process.env.PG_HOST || 'postgres',
     database: process.env.PG_DATABASE || 'new_employee_db',
     password: process.env.PG_PASSWORD || 'admin123',
     port: process.env.PG_PORT || 5432,
 });
 
+// Create notifications table
 async function createTables() {
     try {
         console.log('Creating notifications table...');
@@ -31,29 +34,55 @@ async function createTables() {
                 CONSTRAINT single_target CHECK ((employee_id IS NULL) != (department IS NULL))
             );
         `);
-        console.log('Table created successfully');
+        console.log('Notifications table created successfully');
     } catch (error) {
         console.error('Error creating table:', error.message, error.stack);
         throw error;
     }
 }
 
-// With this:
+// CORS configuration
 const corsOptions = {
-  origin: ['http://127.0.0.1:5503', 'http://54.166.206.245:3023'],
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true
+   origin: [
+        'http://127.0.0.1:5503',
+        'http://localhost:5503',
+        'http://3.88.203.125:3601',
+        'http://3.88.203.125:7102', // HR Notification Portal
+        'http://3.88.203.125:7103', // Employee Notification Portal
+        'http://localhost:7102',
+        'http://localhost:7103',
+    ],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
 };
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.static('Notifications'));
 
-app.get('/api/health', (req, res) => {
+// Health check endpoint
+app.get('/api/health', async (req, res) => {
     console.log('Health check requested');
-    res.json({ status: 'Server is running', timestamp: new Date().toISOString() });
+    try {
+        const result = await pool.query('SELECT NOW()');
+        res.json({
+            status: 'Server is running',
+            database: 'Connected',
+            databaseTime: result.rows[0].now,
+            timestamp: new Date().toISOString(),
+        });
+    } catch (error) {
+        console.error('Health check DB error:', error.message);
+        res.status(500).json({
+            status: 'Server is running',
+            database: 'Disconnected',
+            error: error.message,
+            timestamp: new Date().toISOString(),
+        });
+    }
 });
 
+// Get employees by department
 app.get('/api/employees/:department', async (req, res) => {
     const { department } = req.params;
     console.log(`Fetching employees for department: ${department}`);
@@ -75,6 +104,7 @@ app.get('/api/employees/:department', async (req, res) => {
     }
 });
 
+// Create notification
 app.post('/api/notifications', async (req, res) => {
     const { employeeId, department, title, message } = req.body;
     console.log('Creating notification:', { employeeId, department, title });
@@ -91,6 +121,7 @@ app.post('/api/notifications', async (req, res) => {
     }
 });
 
+// Get notifications for employee
 app.get('/api/notifications/:employeeId', async (req, res) => {
     const { employeeId } = req.params;
     console.log(`Fetching notifications for employeeId: ${employeeId}`);
@@ -118,14 +149,16 @@ app.get('/api/notifications/:employeeId', async (req, res) => {
     }
 });
 
+// Start server
 async function startServer() {
     try {
         console.log('Connecting to database...');
-        await pool.connect();
-        console.log('Database connected');
+        const client = await pool.connect();
+        console.log('Database connected successfully');
+        client.release();
         await createTables();
-        app.listen(port, () => {
-            console.log(`Server running on http://54.166.206.245:${port}`);
+        app.listen(port, host, () => {
+            console.log(`Server running on http://${host}:${port} (accessible at http://3.88.203.125:${port})`);
         });
     } catch (error) {
         console.error('Error starting server:', error.message, error.stack);

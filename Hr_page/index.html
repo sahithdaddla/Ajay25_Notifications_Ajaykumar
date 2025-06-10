@@ -1,477 +1,438 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Leave History</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f5f7fa;
-      margin: 0;
-      padding: 20px;
-      color: #2c3e50;
-      line-height: 1.6;
-    }
-  
-    header {
-      background: linear-gradient(135deg, #3498db, #2c3e50);
-      color: white;
-      text-align: center;
-      padding: 1rem;
-      margin-bottom: 2rem;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      border-radius: 12px;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HR Notification Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --secondary: #f43f5e;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray: #94a3b8;
+            --gradient-indigo: linear-gradient(135deg, #4f46e5, #818cf8);
+            --gradient-teal: linear-gradient(135deg, #14b8a6, #6ee7b7);
+            --gradient-coral: linear-gradient(135deg, #a63ff4, #fb7185);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --border-radius: 12px;
+        }
 
-    header h1 {
-      font-size: 2.5rem;
-      margin: 0 0 0.5rem 0;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-      text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
-    }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    header p {
-      font-size: 1.2rem;
-      margin: 0;
-      opacity: 0.9;
-      font-weight: 300;
-      max-width: 600px;
-      margin: 0 auto;
-      line-height: 1.5;
-    }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: white;
+            color: var(--dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
 
-    .card-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-      gap: 25px;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 20px;
-    }
+        header {
+            position: relative;
+            text-align: center;
+            height: 140px;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            border-radius: 16px;
+            overflow: hidden;
+            display: flex;
+            width: 100%;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 20px;
+        }
 
-    .card {
-      background: white;
-      border-radius: 12px;
-      padding: 25px;
-      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      border-top: 5px solid;
-      display: flex;
-      flex-direction: column;
-      height: 400px; /* Fixed height for all cards */
-    }
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: 700;
+            position: relative;
+            z-index: 2;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
 
-    .card-content {
-      overflow-y: auto; /* Add scroll when content overflows */
-      flex-grow: 1;
-      padding-right: 5px; /* Prevent content from touching scrollbar */
-    }
+        header p {
+            font-weight: 300;
+            font-size: 1.1rem;
+            margin-top: 15px;
+            max-width: 700px;
+            opacity: 0.9;
+            z-index: 2;
+        }
 
-    /* Custom scrollbar for card content */
-    .card-content::-webkit-scrollbar {
-      width: 6px;
-    }
+        @keyframes moveCircles {
+            0% { transform: translateY(0) translateX(0); }
+            50% { transform: translateY(-50%) translateX(-50%); }
+            100% { transform: translateY(0) translateX(0); }
+        }
 
-    .card-content::-webkit-scrollbar-track {
-      background: #f1f1f1;
-      border-radius: 3px;
-    }
+        .banner-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+        }
 
-    .card-content::-webkit-scrollbar-thumb {
-      background: #c1c1c1;
-      border-radius: 3px;
-    }
+        .circle {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: moveCircles 10s infinite linear;
+        }
 
-    .card-content::-webkit-scrollbar-thumb:hover {
-      background: #a8a8a8;
-    }
+        .circle:nth-child(1) {
+            top: 10%;
+            left: 20%;
+            animation-duration: 8s;
+        }
 
-    .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
-    }
+        .circle:nth-child(2) {
+            top: 50%;
+            left: 70%;
+            animation-duration: 12s;
+        }
 
-    .card h3 {
-      margin-top: 0;
-      color: #3498db;
-      font-size: 1.5rem;
-      padding-bottom: 15px;
-      border-bottom: 1px solid #eee;
-      margin-bottom: 20px;
-    }
+        .circle:nth-child(3) {
+            top: 80%;
+            left: 40%;
+            animation-duration: 15s;
+        }
 
-    .info-row {
-      display: flex;
-      margin-bottom: 15px;
-      line-height: 1.6;
-    }
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
 
-    .label {
-      font-weight: 600;
-      color: #2c3e50;
-      width: 120px;
-      flex-shrink: 0;
-    }
+        .main-content {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.5s ease;
+        }
 
-    .value {
-      color: #555;
-      word-break: break-word;
-      flex-grow: 1;
-    }
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
 
-    .status {
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-weight: 600;
-      font-size: 0.9rem;
-      text-transform: capitalize;
-      display: inline-block;
-    }
+        .form-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            background: var(--gradient-teal);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
-    .status.Approved {
-      background-color: #e8f5e9;
-      color: #2e7d32;
-    }
+        .notification-form {
+            display: grid;
+            gap: 1.5rem;
+        }
 
-    .status.Rejected {
-      background-color: #ffebee;
-      color: #c62828;
-    }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
 
-    .status.Pending {
-      background-color: #fff8e1;
-      color: #ff8f00;
-    }
+        .form-group.hidden {
+            display: none;
+        }
 
-    .button-container {
-      display: flex;
-      gap: 10px;
-      margin-top: 25px;
-      padding-top: 15px;
-      border-top: 1px dashed #ddd;
-    }
+        label {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
 
-    .approve-btn, .reject-btn {
-      flex: 1;
-      padding: 10px;
-      border: none;
-      border-radius: 6px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
+        input, select, textarea {
+            padding: 0.75rem;
+            border: 1px solid var(--gray);
+            border-radius: var(--border-radius);
+            font-size: 0.95rem;
+            transition: var(--transition);
+        }
 
-    .approve-btn {
-      background: linear-gradient(135deg, #4CAF50, #8BC34A);
-      color: white;
-    }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+        }
 
-    .approve-btn:hover {
-      background: linear-gradient(135deg, #3d8b40, #7cb342);
-      transform: translateY(-2px);
-    }
+        select {
+            appearance: none;
+        }
 
-    .reject-btn {
-      background: linear-gradient(135deg, #f44336, #e53935);
-      color: white;
-    }
+        textarea {
+            resize: none;
+            height: 120px;
+        }
 
-    .reject-btn:hover {
-      background: linear-gradient(135deg, #d32f2f, #c62828);
-      transform: translateY(-2px);
-    }
+        .error-message {
+            color: var(--error);
+            font-size: 0.8rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
 
-    .card.Annual {
-      border-top-color: #3498db;
-    }
-    .card.Sick {
-      border-top-color: #9C27B0;
-    }
-    .card.Casual {
-      border-top-color: #FF9800;
-    }
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius);
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            background: var(--gradient-coral);
+            color: white;
+        }
 
-    .search-filter-container {
-      max-width: 1200px;
-      margin: 0 auto 20px;
-      padding: 0 20px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 15px;
-      align-items: center;
-    }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
 
-    .search-box {
-      flex: 1;
-      min-width: 250px;
-      padding: 12px 15px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      font-size: 16px;
-      transition: all 0.3s ease;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    }
+        .confirmation {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
 
-    .search-box:focus {
-      outline: none;
-      border-color: #3498db;
-      box-shadow: 0 2px 8px rgba(52, 152, 219, 0.2);
-    }
+        .confirmation.show {
+            display: flex;
+        }
 
-    .filter-dropdown {
-      padding: 12px 15px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      font-size: 16px;
-      background-color: white;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    }
+        .confirmation-content {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            text-align: center;
+            max-width: 400px;
+            animation: slideIn 0.3s ease;
+        }
 
-    .no-results {
-      text-align: center;
-      grid-column: 1 / -1;
-      padding: 40px;
-      color: #777;
-      font-size: 18px;
-    }
+        .confirmation-icon {
+            width: 60px;
+            margin-bottom: 1rem;
+        }
 
-    @media (max-width: 768px) {
-      .card-container {
-        grid-template-columns: 1fr;
-        padding: 10px;
-      }
-      
-      .info-row {
-        flex-direction: column;
-      }
-      
-      .label {
-        width: 100%;
-        margin-bottom: 5px;
-      }
-    }
-  </style>
+        .confirmation-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .confirmation-message {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 10px;
+            }
+
+            .main-content {
+                padding: 1.5rem;
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <h1>Leave Management</h1>
-    <p>"Empowering employees through flexible leave solutions"</p>
-  </header>
+    <header>
+        <div class="banner-background">
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+        </div>
+        <h1>Notification To Staff</h1>
+        <p>Create new notifications to staff</p>
+    </header>
 
-  <div class="search-filter-container">
-    <input type="text" id="searchBox" class="search-box" placeholder="Search by Employee ID or Name">
-    <select id="statusFilter" class="filter-dropdown">
-      <option value="">All Statuses</option>
-      <option value="Pending">Pending</option>
-      <option value="Approved">Approved</option>
-      <option value="Rejected">Rejected</option>
-    </select>
-    <select id="leaveTypeFilter" class="filter-dropdown">
-      <option value="">All Leave Types</option>
-      <option value="Annual Leave">Annual Leave</option>
-      <option value="Sick Leave">Sick Leave</option>
-      <option value="Casual Leave">Casual Leave</option>
-    </select>
-  </div>
+    <div class="container">
+        <div class="main-content">
+            <div class="form-container">
+                <form id="notificationForm" class="notification-form">
+                    <div class="form-group">
+                        <label for="department">Department</label>
+                        <select id="department" required>
+                            <option value="" disabled selected>Select Department</option>
+                        </select>
+                        <p class="error-message" id="departmentError">Please select a department</p>
+                    </div>
+                    <div class="form-group hidden" id="employeeIdGroup">
+                        <label for="employeeId">Employee ID</label>
+                        <input type="text" id="employeeId" placeholder="e.g., ATS0xxx" minlength="7" maxlength="7">
+                        <p class="error-message" id="employeeIdError">Invalid employee ID format</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="title">Notification Title</label>
+                        <input type="text" id="title" placeholder="Notification Title" required minlength="5" maxlength="100">
+                        <p class="error-message" id="titleError">No leading/trailing spaces or consecutive spaces allowed</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" placeholder="Notification message..." required minlength="10" maxlength="250"></textarea>
+                        <p class="error-message" id="messageError">No leading/trailing spaces or consecutive spaces allowed</p>
+                    </div>
+                    <button type="submit" class="btn">Send Notification</button>
+                </form>
+            </div>
+        </div>
+    </div>
 
-  <div id="notification" style="display: none;"></div>
+    <div class="confirmation">
+        <div class="confirmation-content">
+            <img src="https://cdn.pixabay.com/animation/2023/03/20/02/45/02-45-27-186_512.gif" class="confirmation-icon" alt="Success">
+            <h3 class="confirmation-title">Notification Sent!</h3>
+            <p class="confirmation-message">The notification has been successfully sent.</p>
+            <button class="btn" onclick="document.querySelector('.confirmation').classList.remove('show')">OK</button>
+        </div>
+    </div>
 
-  <div class="card-container" id="leaveHistoryContainer">
-    <!-- Cards will be populated dynamically -->
-  </div>
+    <script>
+        const BASE_URL = 'http://3.88.203.125:3601';
+        // const BASE_URL = 'http://localhost:3601'; // For local testing
+        const departments = ['All Departments', 'Developers', 'Testers', 'PowerBI', 'DevOps', 'HR', 'Particular Employee'];
 
-  <script>
-    const container = document.getElementById("leaveHistoryContainer");
-    const notification = document.getElementById("notification");
-    const searchBox = document.getElementById("searchBox");
-    const statusFilter = document.getElementById("statusFilter");
-    const leaveTypeFilter = document.getElementById("leaveTypeFilter");
-    let allLeaveRequests = [];
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('notificationForm');
+            const confirmation = document.querySelector('.confirmation');
+            const departmentSelect = document.getElementById('department');
+            const employeeIdGroup = document.getElementById('employeeIdGroup');
+            const employeeIdInput = document.getElementById('employeeId');
 
-    function showNotification(message, isSuccess) {
-      notification.textContent = message;
-      notification.style.display = "block";
-      notification.style.backgroundColor = isSuccess ? "#4CAF50" : "#f44336";
-      notification.style.color = "white";
-      notification.style.padding = "10px";
-      notification.style.margin = "10px 0";
-      notification.style.borderRadius = "4px";
-      
-      setTimeout(() => {
-        notification.style.display = "none";
-      }, 3000);
-    }
+            function loadDepartments() {
+                departmentSelect.innerHTML = '<option value="" disabled selected>Select Department</option>';
+                departments.forEach(dept => {
+                    const option = document.createElement('option');
+                    option.value = dept;
+                    option.textContent = dept;
+                    departmentSelect.appendChild(option);
+                });
+            }
 
-    function confirmAction(action, callback) {
-      if (confirm(`Are you sure you want to ${action} this leave request?`)) {
-        callback();
-      }
-    }
+            departmentSelect.addEventListener('change', () => {
+                const department = departmentSelect.value;
+                document.getElementById('departmentError').style.display = 'none';
+                employeeIdGroup.classList.toggle('hidden', department !== 'Particular Employee');
+                employeeIdInput.value = '';
+                document.getElementById('employeeIdError').style.display = 'none';
+            });
 
-    function formatDate(dateStr) {
-      const date = new Date(dateStr);
-      if (isNaN(date.getTime())) {
-        return dateStr; // If not a valid date, return as-is (likely already YYYY-MM-DD)
-      }
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, '0');
-      const day = String(date.getDate()).padStart(2, '0');
-      return `${year}-${month}-${day}`;
-    }
+            function setupValidation(fieldId, errorId, errorMessage, validator) {
+                const field = document.getElementById(fieldId);
+                const errorElement = document.getElementById(errorId);
+                field.addEventListener('input', () => {
+                    const value = field.value;
+                    const isValid = validator(value);
+                    errorElement.textContent = errorMessage;
+                    errorElement.style.display = isValid ? 'none' : 'block';
+                    field.setCustomValidity(isValid ? '' : errorMessage);
+                });
+            }
 
-    async function fetchLeaveRequests() {
-      try {
-        const response = await fetch('http://98.80.67.100:3016/api/leave-requests', {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' }
+            const spaceValidator = value => {
+                if (!value) return false;
+                return !/^\s|\s$|\s{2,}/.test(value);
+            };
+
+            setupValidation('employeeId', 'employeeIdError', 'Invalid employee ID format', 
+                value => value === '' || /^[ATS]{3}0(?!000)[0-9]{3}$/.test(value));
+            setupValidation('title', 'titleError', 'No leading/trailing spaces or consecutive spaces allowed', 
+                value => spaceValidator(value) && /^[A-Za-z0-9.,!?-]+(\s[A-Za-z0-9.,!?-]+)*$/.test(value));
+            setupValidation('message', 'messageError', 'No leading/trailing spaces or consecutive spaces allowed', 
+                value => spaceValidator(value) && /^[A-Za-z0-9.,!?-]+(\s[A-Za-z0-9.,!?-]+)*$/.test(value));
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                if (!form.checkValidity()) {
+                    form.querySelectorAll('.form-group').forEach(group => {
+                        const input = group.querySelector('input, select, textarea');
+                        const error = group.querySelector('.error-message');
+                        if (input && !input.validity.valid) {
+                            error.style.display = 'block';
+                        } else if (error) {
+                            error.style.display = 'none';
+                        }
+                    });
+                    return;
+                }
+
+                const department = departmentSelect.value;
+                const employeeId = employeeIdInput.value.trim();
+                const notification = {
+                    employeeId: department === 'Particular Employee' && employeeId ? employeeId : null,
+                    department: department !== 'Particular Employee' ? department : null,
+                    title: document.getElementById('title').value.trim(),
+                    message: document.getElementById('message').value.trim(),
+                };
+
+                try {
+                    const response = await fetch(`${BASE_URL}/api/notifications`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(notification),
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json().catch(() => ({}));
+                        throw new Error(errorData.error || `Failed to send notification: ${response.statusText}`);
+                    }
+
+                    form.reset();
+                    departmentSelect.value = '';
+                    employeeIdGroup.classList.add('hidden');
+                    employeeIdInput.value = '';
+                    confirmation.classList.add('show');
+                    setTimeout(() => confirmation.classList.remove('show'), 3000);
+                } catch (error) {
+                    document.getElementById('employeeIdError').textContent = `Server error: ${error.message}. Please check if the server is running.`;
+                    document.getElementById('employeeIdError').style.display = 'block';
+                    console.error('Submission error:', error);
+                }
+            });
+
+            loadDepartments();
         });
-        if (!response.ok) throw new Error((await response.json()).message || 'Failed to fetch leave requests');
-        return await response.json();
-      } catch (error) {
-        console.error('Error fetching leave requests:', error);
-        showNotification(`Error: ${error.message}`, false);
-        return [];
-      }
-    }
-
-    async function updateLeaveStatus(id, status) {
-      try {
-        const response = await fetch(`http://98.80.67.100:3016/api/leave-requests/${id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ status })
-        });
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.message || 'Failed to update leave status');
-        }
-        return await response.json();
-      } catch (error) {
-        console.error('Error updating leave status:', error);
-        throw error;
-      }
-    }
-
-    function getLeaveTypeClass(leaveType) {
-      return leaveType.split(' ')[0]; // e.g., "Annual Leave" -> "Annual"
-    }
-
-    function renderLeaveRequests(requests) {
-      container.innerHTML = "";
-
-      if (requests.length === 0) {
-        container.innerHTML = '<div class="no-results">No leave requests found.</div>';
-        return;
-      }
-
-      requests.forEach((request, index) => {
-        const leaveTypeClass = getLeaveTypeClass(request.leave_type);
-        const card = document.createElement("div");
-        card.className = `card ${leaveTypeClass}`;
-
-        const buttonsHtml = request.status === "Pending" 
-          ? `<div class="button-container">
-               <button class="approve-btn" data-id="${request.id}" data-index="${index}">Approve</button>
-               <button class="reject-btn" data-id="${request.id}" data-index="${index}">Reject</button>
-             </div>`
-          : "";
-
-        const cardContent = document.createElement("div");
-        cardContent.className = "card-content";
-        cardContent.innerHTML = `
-          <h3>${request.leave_type}</h3>
-          <div class="info-row">
-            <span class="label">Employee ID:</span>
-            <span class="value">${request.emp_id}</span>
-          </div>
-          <div class="info-row">
-            <span class="label">Employee Name:</span>
-            <span class="value">${request.emp_name}</span>
-          </div>
-          <div class="info-row">
-            <span class="label">Date Range:</span>
-            <span class="value">${formatDate(request.start_date)} - ${formatDate(request.end_date)}</span>
-          </div>
-          <div class="info-row">
-            <span class="label">Submitted On:</span>
-            <span class="value">${formatDate(request.submitted_date)}</span>
-          </div>
-          <div class="info-row">
-            <span class="label">Status:</span>
-            <span class="value"><span class="status ${request.status}">${request.status}</span></span>
-          </div>
-          <div class="info-row">
-            <span class="label">Reason:</span>
-            <span class="value">${request.reason}</span>
-          </div>
-        `;
-
-        card.appendChild(cardContent);
-        card.innerHTML += buttonsHtml;
-        container.appendChild(card);
-      });
-    }
-
-    function filterLeaveRequests() {
-      const searchText = searchBox.value.toLowerCase().trim();
-      const selectedStatus = statusFilter.value;
-      const selectedLeaveType = leaveTypeFilter.value;
-
-      const filteredRequests = allLeaveRequests.filter(request => {
-        const matchesSearch = 
-          request.emp_id.toLowerCase().includes(searchText) ||
-          request.emp_name.toLowerCase().includes(searchText);
-        const matchesStatus = selectedStatus ? request.status === selectedStatus : true;
-        const matchesLeaveType = selectedLeaveType ? request.leave_type === selectedLeaveType : true;
-
-        return matchesSearch && matchesStatus && matchesLeaveType;
-      });
-
-      renderLeaveRequests(filteredRequests);
-    }
-
-    container.addEventListener("click", async (e) => {
-      const button = e.target;
-      const id = button.dataset.id;
-      const index = button.dataset.index;
-
-      if (button.classList.contains("approve-btn")) {
-        confirmAction("approve", async () => {
-          try {
-            await updateLeaveStatus(id, "Approved");
-            allLeaveRequests[index].status = "Approved";
-            filterLeaveRequests();
-            showNotification("Leave request approved successfully!", true);
-          } catch (error) {
-            showNotification(error.message || "Failed to approve leave request.", false);
-          }
-        });
-      } else if (button.classList.contains("reject-btn")) {
-        confirmAction("reject", async () => {
-          try {
-            await updateLeaveStatus(id, "Rejected");
-            allLeaveRequests[index].status = "Rejected";
-            filterLeaveRequests();
-            showNotification("Leave request rejected successfully!", true);
-          } catch (error) {
-            showNotification(error.message || "Failed to reject leave request.", false);
-          }
-        });
-      }
-    });
-
-    searchBox.addEventListener("input", filterLeaveRequests);
-    statusFilter.addEventListener("change", filterLeaveRequests);
-    leaveTypeFilter.addEventListener("change", filterLeaveRequests);
-
-    document.addEventListener("DOMContentLoaded", async () => {
-      allLeaveRequests = await fetchLeaveRequests();
-      renderLeaveRequests(allLeaveRequests);
-    });
-  </script>
+    </script>
 </body>
 </html>
